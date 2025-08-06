@@ -1,0 +1,46 @@
+{
+    "schema_version": "0.2",
+    "feature": "PR description drafting (Visual Studio)",
+    "category": "GitHub.com integration",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "not_included"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "Visual Studio 2022",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "stable",
+                    "min_ide_version": "17.10",
+                    "min_plugin_version": null,
+                    "start_date": "2024-07-01",
+                    "evidence": [
+                        {
+                            "url": "https://devblogs.microsoft.com/visualstudio/let-github-copilot-draft-of-your-pull-request-description/"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "schema_version": "0.2",
+    "feature": "Pull request summaries (GitHub.com)",
+    "category": "Review",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "not_included"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "GitHub.com",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "web",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2024-02-27",
+                    "evidence": [
+                        {
+                            "url": "https://github.blog/changelog/2024-02-27-copilot-enterprise-is-now-generally-available/"
+                        },
+                        {
+                            "url": "https://docs.github.com/en/copilot/how-tos/use-copilot-for-common-tasks/create-a-pr-summary"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

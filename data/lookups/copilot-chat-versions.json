@@ -1,0 +1,62 @@
+{
+    "schema_version": "0.1",
+    "source": "https://github.com/microsoft/vscode-copilot-chat/releases",
+    "last_updated_utc": "2025-08-05T13:00:00Z",
+    "notes": "Generated from GitHub Releases. Timestamps reflect GitHub release publish time.",
+    "versions": [
+        {
+            "version": "0.24.x",
+            "tag": "v0.24.20250206",
+            "released_at": "2025-02-06T00:00:00Z",
+            "channel": "stable",
+            "anchors": [
+                "https://github.blog/changelog/2025-02-06-next-edit-suggestions-agent-mode-and-prompts-files-for-github-copilot-in-vs-code-january-release-v0-24/"
+            ]
+        },
+        {
+            "version": "0.25.x",
+            "tag": "v0.25.20250306",
+            "released_at": "2025-03-06T00:00:00Z",
+            "channel": "stable",
+            "anchors": [
+                "https://github.blog/changelog/2025-03-06-github-copilot-updates-in-visual-studio-code-february-release-v0-25-including-improvements-to-agent-mode-and-next-exit-suggestions-ga-of-custom-instructions-and-more/"
+            ]
+        },
+        {
+            "version": "0.30.2025071701",
+            "tag": "v0.30.2025071701",
+            "released_at": "2025-07-17T00:00:00Z",
+            "channel": "pre-release",
+            "anchors": [
+                "https://github.com/microsoft/vscode-copilot-chat/releases"
+            ]
+        },
+        {
+            "version": "0.30.2025071801",
+            "tag": "v0.30.2025071801",
+            "released_at": "2025-07-18T00:00:00Z",
+            "channel": "pre-release",
+            "anchors": [
+                "https://github.com/microsoft/vscode-copilot-chat/releases"
+            ]
+        },
+        {
+            "version": "0.30.2025072102",
+            "tag": "v0.30.2025072102",
+            "released_at": "2025-07-21T00:00:00Z",
+            "channel": "pre-release",
+            "anchors": [
+                "https://github.com/microsoft/vscode-copilot-chat/releases"
+            ]
+        },
+        {
+            "version": "0.30.2025072103",
+            "tag": "v0.30.2025072103",
+            "released_at": "2025-07-21T00:00:00Z",
+            "channel": "pre-release",
+            "anchors": [
+                "https://github.com/microsoft/vscode-copilot-chat/releases"
+            ]
+        }
+    ]
+}

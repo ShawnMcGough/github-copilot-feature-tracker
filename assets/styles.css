@@ -1,0 +1,338 @@
+:root {
+    --bg: #0e1116;
+    --card: #161b22;
+    --fg: #e6edf3;
+    --muted: #9da7b3;
+    --accent: #2f81f7;
+    --ok: #2ea043;
+    --preview: #d29922;
+    --warn: #f85149;
+    --chip: #30363d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Segoe UI Emoji";
+    color: var(--fg);
+    background: var(--bg);
+}
+
+header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #30363d;
+}
+
+main {
+    padding: 16px 24px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.controls {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+label {
+    font-size: 12px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #0d1117;
+    color: var(--fg);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th,
+td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #30363d;
+    vertical-align: top;
+}
+
+th {
+    text-align: left;
+    color: var(--muted);
+    position: sticky;
+    top: 0;
+    background: var(--card);
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip {
+    background: var(--chip);
+    border: 1px solid #30363d;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* Pills for Preview/GA version cells */
+.pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #30363d;
+}
+
+.pill-ga {
+    color: #fff;
+    background: var(--ok);
+    border-color: #248a3d;
+}
+
+.pill-preview {
+    color: #13151a;
+    background: #ffd866;
+    border-color: #e6b800;
+}
+
+/* Make pill links look like pills (no underline) */
+.pill-link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter .15s ease-in-out;
+}
+
+.pill-link:hover {
+    filter: brightness(0.95);
+}
+
+/* Legend styling */
+.legend {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #30363d;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+/* Chevron (toggle) */
+.feature-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    background: transparent;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+}
+
+.chevron::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid #9da7b3;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transform: translate(-50%, -50%) rotate(0deg);
+    transition: transform .15s ease-in-out;
+}
+
+.chevron.open::before {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* Legend indicator only */
+.chevron-indicator {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Drawer rows */
+.drawer-row {
+    display: none;
+}
+
+.drawer-row.open {
+    display: table-row;
+}
+
+.drawer {
+    padding: 12px;
+    background: #0d1117;
+    border: 1px dashed #30363d;
+    border-radius: 8px;
+}
+
+.drawer-title {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/* SKUs section inside drawer */
+.drawer-skus {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+    margin: 6px 0 10px;
+}
+
+.drawer-skus .key {
+    color: var(--muted);
+}
+
+.drawer-skus .val .chip {
+    margin-right: 6px;
+}
+
+/* Milestone list */
+.milestone-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.milestone-item {
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 8px;
+    background: #0e1219;
+}
+
+.milestone-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.milestone-body {
+    display: grid;
+    gap: 4px;
+}
+
+.kv {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+}
+
+.key {
+    color: var(--muted);
+}
+
+.val a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.val a:hover {
+    text-decoration: underline;
+}
+
+/* Status badges inside drawer */
+.badge {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid #30363d;
+    color: #ffffff;
+}
+
+.badge-preview {
+    background: #d29922;
+    color: #13151a;
+    border-color: #b8860b;
+}
+
+.badge-ga {
+    background: #2ea043;
+    border-color: #248a3d;
+}
+
+.badge-deprecated {
+    background: #6e7681;
+    border-color: #515862;
+}
+
+.badge-withdrawn {
+    background: #f85149;
+    border-color: #da3633;
+}
+
+.badge-neutral {
+    background: #30363d;
+}
+
+/* Micro chip (reused for channel and SKUs) */
+.chip.micro {
+    background: var(--chip);
+    color: var(--muted);
+    border: 1px solid #30363d;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 11px;
+}
+
+/* Misc */
+.muted {
+    color: var(--muted);
+}
+
+.empty {
+    color: var(--muted);
+    font-style: italic;
+}
+
+.footer {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 16px;
+}

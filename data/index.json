@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.2",
+  "generated_at": "2025-08-05",
+  "surfaces": ["VS Code", "Visual Studio 2022", "JetBrains IDEs", "Neovim", "GitHub.com", "CLI"],
+  "features": [
+    {"slug": "inline-completions", "feature": "Inline Completions", "category": "Inline", "path": "features/inline-completions.json"},
+    {"slug": "copilot-chat-ide", "feature": "Copilot Chat (in IDE)", "category": "Chat", "path": "features/copilot-chat-ide.json"},
+    {"slug": "agent-mode", "feature": "Agent Mode", "category": "Agent", "path": "features/agent-mode.json"},
+    {"slug": "next-edit-suggestions", "feature": "Next Edit Suggestions (NES)", "category": "Inline", "path": "features/next-edit-suggestions.json"},
+    {"slug": "copilot-edits", "feature": "Copilot Edits (multi-file editing)", "category": "Edits", "path": "features/copilot-edits.json"},
+    {"slug": "commit-message-generation", "feature": "Commit message generation", "category": "IDE tasks", "path": "features/commit-message-generation.json"},
+    {"slug": "pr-description-drafting-vs", "feature": "PR description drafting (Visual Studio)", "category": "GitHub.com integration", "path": "features/pr-description-drafting-vs.json"},
+    {"slug": "pull-request-summaries", "feature": "Pull request summaries (GitHub.com)", "category": "Review", "path": "features/pull-request-summaries.json"},
+    {"slug": "copilot-chat-github", "feature": "Copilot Chat (on GitHub.com)", "category": "Chat", "path": "features/copilot-chat-github.json"},
+    {"slug": "copilot-cli", "feature": "Copilot in the CLI", "category": "CLI", "path": "features/copilot-cli.json"},
+    {"slug": "knowledge-bases", "feature": "Knowledge bases (Org docs as context)", "category": "Knowledge", "path": "features/knowledge-bases.json"},
+    {"slug": "model-picker", "feature": "Model picker and premium models in chat", "category": "Chat", "path": "features/model-picker.json"},
+    {"slug": "slash-commands", "feature": "Slash commands in chat", "category": "Chat", "path": "features/slash-commands.json"},
+    {"slug": "attach-context", "feature": "Attach context (files, variables, mentions) to chat", "category": "Chat", "path": "features/attach-context.json"},
+    {"slug": "ai-code-actions", "feature": "AI code actions (Fix/Explain/Generate tests)", "category": "Edits", "path": "features/ai-code-actions.json"},
+    {"slug": "semantic-file-search", "feature": "Semantic file search suggestions", "category": "IDE tasks", "path": "features/semantic-file-search.json"},
+    {"slug": "copilot-extensions", "feature": "Copilot Extensions (integrate external tools)", "category": "Extensions", "path": "features/copilot-extensions.json"},
+    {"slug": "pr-titles-vscode", "feature": "Generate PR titles/descriptions (VS Code)", "category": "GitHub.com integration", "path": "features/pr-titles-vscode.json"},
+    {"slug": "web-search-github-chat", "feature": "Web search in GitHub.com chat", "category": "Chat", "path": "features/web-search-github-chat.json"},
+    {"slug": "supported-ides-catalog", "feature": "Supported IDEs catalog (install + setup)", "category": "Platform", "path": "features/supported-ides-catalog.json"}
+  ]
+}

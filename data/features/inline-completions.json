@@ -1,0 +1,97 @@
+{
+    "schema_version": "0.2",
+    "feature": "Inline Completions",
+    "category": "Inline",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "VS Code",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": null,
+                    "evidence": [
+                        {
+                            "url": "https://code.visualstudio.com/docs/copilot/reference/copilot-vscode-features"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "Visual Studio 2022",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": "17.8",
+                    "min_plugin_version": null,
+                    "start_date": "2023-11-14",
+                    "evidence": [
+                        {
+                            "url": "https://learn.microsoft.com/en-us/visualstudio/ide/visual-studio-github-copilot-extension?view=vs-2022"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "JetBrains IDEs",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": null,
+                    "evidence": [
+                        {
+                            "url": "https://plugins.jetbrains.com/plugin/17718-github-copilot"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "Neovim",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": null,
+                    "evidence": [
+                        {
+                            "url": "https://github.com/github/copilot.vim"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

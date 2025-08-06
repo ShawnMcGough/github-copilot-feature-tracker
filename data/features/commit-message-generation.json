@@ -1,0 +1,46 @@
+{
+    "schema_version": "0.2",
+    "feature": "Commit message generation",
+    "category": "IDE tasks",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "VS Code",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": null,
+                    "evidence": [
+                        {
+                            "url": "https://github.com/microsoft/vscode-docs/blob/main/docs/copilot/reference/copilot-vscode-features.md"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

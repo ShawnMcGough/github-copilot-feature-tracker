@@ -1,0 +1,83 @@
+{
+    "schema_version": "0.2",
+    "feature": "Copilot Extensions (integrate external tools)",
+    "category": "Extensions",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "VS Code",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": null,
+                    "evidence": [
+                        {
+                            "url": "https://github.com/features/copilot/extensions"
+                        },
+                        {
+                            "url": "https://docs.github.com/en/copilot/how-tos/provide-context/install-copilot-extensions"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "Visual Studio 2022",
+            "milestones": [
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-06-17",
+                    "evidence": [
+                        {
+                            "url": "https://devblogs.microsoft.com/visualstudio/agent-mode-is-now-generally-available-with-mcp-support/"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "JetBrains IDEs",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-05-19",
+                    "evidence": [
+                        {
+                            "url": "https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

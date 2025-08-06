@@ -1,0 +1,75 @@
+{
+    "schema_version": "0.2",
+    "feature": "Next Edit Suggestions (NES)",
+    "category": "Inline",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "VS Code",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "insiders",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-02-12",
+                    "evidence": [
+                        {
+                            "url": "https://code.visualstudio.com/blogs/2025/02/12/next-edit-suggestions"
+                        }
+                    ]
+                },
+                {
+                    "status": "public_preview",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-03-06",
+                    "evidence": [
+                        {
+                            "url": "https://github.blog/changelog/2025-03-06-github-copilot-updates-in-visual-studio-code-february-release-v0-25-including-improvements-to-agent-mode-and-next-exit-suggestions-ga-of-custom-instructions-and-more/"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "Visual Studio 2022",
+            "milestones": [
+                {
+                    "status": "available",
+                    "channel": "stable",
+                    "min_ide_version": "17.14",
+                    "min_plugin_version": null,
+                    "start_date": "2025-05-13",
+                    "evidence": [
+                        {
+                            "url": "https://learn.microsoft.com/en-us/visualstudio/ide/copilot-next-edit-suggestions?view=vs-2022"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

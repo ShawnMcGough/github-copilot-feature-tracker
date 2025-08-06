@@ -1,0 +1,104 @@
+{
+    "schema_version": "0.2",
+    "feature": "Agent Mode",
+    "category": "Agent",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "VS Code",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "insiders",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-02-12",
+                    "evidence": [
+                        {
+                            "url": "https://code.visualstudio.com/blogs/2025/02/12/next-edit-suggestions"
+                        }
+                    ]
+                },
+                {
+                    "status": "public_preview",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-02-24",
+                    "evidence": [
+                        {
+                            "url": "https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "Visual Studio 2022",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "preview",
+                    "min_ide_version": "17.14",
+                    "min_plugin_version": null,
+                    "start_date": "2025-05-13",
+                    "evidence": [
+                        {
+                            "url": "https://devblogs.microsoft.com/dotnet/improve-productivity-with-github-copilot-dotnet/"
+                        }
+                    ]
+                },
+                {
+                    "status": "ga",
+                    "channel": "stable",
+                    "min_ide_version": "17.14",
+                    "min_plugin_version": null,
+                    "start_date": "2025-06-17",
+                    "evidence": [
+                        {
+                            "url": "https://devblogs.microsoft.com/visualstudio/agent-mode-is-now-generally-available-with-mcp-support/"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "surface": "JetBrains IDEs",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "stable",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2025-05-19",
+                    "evidence": [
+                        {
+                            "url": "https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "schema_version": "0.2",
+    "feature": "Web search in GitHub.com chat",
+    "category": "Chat",
+    "skus": [
+        {
+            "name": "Free",
+            "support": "limited"
+        },
+        {
+            "name": "Pro",
+            "support": "included"
+        },
+        {
+            "name": "Pro+",
+            "support": "included"
+        },
+        {
+            "name": "Business",
+            "support": "included"
+        },
+        {
+            "name": "Enterprise",
+            "support": "included"
+        }
+    ],
+    "surfaces": [
+        {
+            "surface": "GitHub.com",
+            "milestones": [
+                {
+                    "status": "public_preview",
+                    "channel": "web",
+                    "min_ide_version": null,
+                    "min_plugin_version": null,
+                    "start_date": "2024-02-27",
+                    "evidence": [
+                        {
+                            "url": "https://github.com/orgs/community/discussions/110324"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

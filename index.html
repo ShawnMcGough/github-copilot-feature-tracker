@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>GitHub Copilot Feature Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+    Data sources referenced by the runtime:
+    - Copilot Chat marketplace page (lockstep with VS Code): https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat
+    - Copilot Chat open-source releases (version + published date): https://github.com/microsoft/vscode-copilot-chat/releases
+    - VS Code + Copilot Chat monthly changelogs (anchors for notable drops):
+      * v0.24 (Feb 6, 2025): https://github.blog/changelog/2025-02-06-next-edit-suggestions-agent-mode-and-prompts-files-for-github-copilot-in-vs-code-january-release-v0-24/
+      * v0.25 (Mar 6, 2025): https://github.blog/changelog/2025-03-06-github-copilot-updates-in-visual-studio-code-february-release-v0-25-including-improvements-to-agent-mode-and-next-exit-suggestions-ga-of-custom-instructions-and-more/
+  -->
+    <link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body>
+    <header>
+        <h1>GitHub Copilot Feature Tracker</h1>
+        <div class="chips" id="summary"></div>
+    </header>
+
+    <main>
+        <div class="card">
+            <div class="controls">
+                <div>
+                    <label for="surfaceFilter">Filter by Surface</label>
+                    <select id="surfaceFilter">
+                        <option value="all">All surfaces</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter">
+                        <option value="all">Any</option>
+                        <option value="ga">GA only</option>
+                        <option value="preview">Preview only</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="skuFilter">SKU</label>
+                    <select id="skuFilter">
+                        <option value="all">Any</option>
+                        <option>Free</option>
+                        <option>Pro</option>
+                        <option>Pro+</option>
+                        <option>Business</option>
+                        <option>Enterprise</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="versionSurface">Version Fit: choose a surface</label>
+                    <select id="versionSurface">
+                        <option value="">—</option>
+                        <option>VS Code</option>
+                        <option>Visual Studio 2022</option>
+                        <option>JetBrains IDEs</option>
+                        <option>Neovim</option>
+                        <option>GitHub.com</option>
+                        <option>CLI</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="versionInput">Version (e.g., 17.10 for Visual Studio)</label>
+                    <input id="versionInput" placeholder="e.g., 17.10 or 1.0.0" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table id="matrix">
+                <thead>
+                    <tr>
+                        <th style="min-width: 300px;">Feature</th>
+                        <th>Category</th>
+                        <th>Surface</th>
+                        <th>Preview Version</th>
+                        <th>GA Version</th>
+                        <th>Min Plugin</th>
+                    </tr>
+                </thead>
+                <tbody id="matrixBody"></tbody>
+            </table>
+
+            <!-- Tiny inline legend -->
+            <div class="legend">
+                <span class="legend-item"><span class="pill pill-preview">1.2.3</span> Preview version (yellow). If
+                    version unknown but confirmed available, shows <span class="pill pill-preview">True</span>. Click to
+                    open evidence.</span>
+                <span class="legend-item"><span class="pill pill-ga">1.2.3</span> GA version (green). If version unknown
+                    but confirmed available, shows <span class="pill pill-ga">True</span>. Click to open
+                    evidence.</span>
+                <span class="legend-item"><span class="chevron chevron-indicator" title="Milestones drawer"></span> Use
+                    chevron to view all milestones (status, channel, versions, dates, sources) and SKUs.</span>
+            </div>
+
+            <div class="footer">
+                Notes:
+                <ul>
+                    <li>Preview/GA columns show the minimum IDE version for that status. When the version is unknown but
+                        status is confirmed, a colored “True” is shown (yellow = preview, green = GA).</li>
+                    <li>SKU details appear inside the milestones drawer and remain searchable via the SKU filter.</li>
+                    <li>When “Version Fit” is set, results hide other surfaces and only show rows for the selected
+                        surface.</li>
+                    <li>Copilot Chat releases in lockstep with VS Code; newest Copilot Chat requires the latest VS Code.
+                        At runtime we estimate “Min Plugin” (GitHub.copilot-chat) by picking the Copilot Chat release
+                        nearest to each milestone date (within 7 days), using official releases and changelogs. See
+                        sources linked above.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (async function () {
+            // Load core data
+            const index = await (await fetch('data/index.json', { cache: 'no-store' })).json();
+            const features = await Promise.all(index.features.map(async f => {
+                const data = await (await fetch('data/' + f.path, { cache: 'no-store' })).json();
+                return { slug: f.slug, path: f.path, ...data };
+            }));
+
+            // Load Copilot Chat version lookup (version/date) for runtime hydration of "Min Plugin" (VS Code)
+            // Structure expected at: data/lookups/copilot-chat-versions.json
+            let chatLookup = null;
+            try {
+                chatLookup = await (await fetch('data/lookups/copilot-chat-versions.json', { cache: 'no-store' })).json();
+            } catch (e) {
+                // If the lookup is missing, the UI will gracefully skip hydration.
+                console.warn('Copilot Chat lookup not found. Min Plugin hydration will be skipped.');
+            }
+
+            const chatVersions = (chatLookup && chatLookup.versions ? chatLookup.versions : [])
+                .map(v => ({ ...v, ts: v.released_at ? Date.parse(v.released_at) : NaN }))
+                .filter(v => !Number.isNaN(v.ts))
+                .sort((a, b) => a.ts - b.ts);
+
+            // DOM elements
+            const surfaces = index.surfaces || [];
+            const surfaceFilter = document.getElementById('surfaceFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const skuFilter = document.getElementById('skuFilter');
+            const versionSurface = document.getElementById('versionSurface');
+            const versionInput = document.getElementById('versionInput');
+            const matrixBody = document.getElementById('matrixBody');
+            const summary = document.getElementById('summary');
+
+            // Populate surface dropdown
+            surfaces.forEach(s => {
+                const opt = document.createElement('option');
+                opt.textContent = s; opt.value = s;
+                surfaceFilter.appendChild(opt);
+            });
+
+            // Helpers
+            function cmpVersion(a, b) {
+                if (!a || !b) return 0;
+                const pa = a.toString().split('.').map(x => parseInt(x, 10));
+                const pb = b.toString().split('.').map(x => parseInt(x, 10));
+                const len = Math.max(pa.length, pb.length);
+                for (let i = 0; i < len; i++) {
+                    const ai = Number.isNaN(pa[i]) ? 0 : pa[i];
+                    const bi = Number.isNaN(pb[i]) ? 0 : pb[i];
+                    if (ai < bi) return -1;
+                    if (ai > bi) return 1;
+                }
+                return 0;
+            }
+
+            function pickEvidence(from) {
+                const ev = (from || []).slice(0, 3);
+                return ev;
+            }
+
+            function earliestVersion(milestones, predicate) {
+                const filtered = (milestones || []).filter(predicate);
+                if (filtered.length === 0) return { exists: false, version: null, evidence: [] };
+                const withIde = filtered.filter(m => m.min_ide_version);
+                if (withIde.length > 0) {
+                    withIde.sort((a, b) => cmpVersion(a.min_ide_version, b.min_ide_version));
+                    const chosen = withIde[0];
+                    return { exists: true, version: chosen.min_ide_version, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
+                }
+                const chosen = filtered[0];
+                return { exists: true, version: null, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
+            }
+
+            // Lockstep-based plugin version picker:
+            // Choose the Copilot Chat version whose release date is on or before (milestone.start_date + 7 days).
+            function pickChatPluginVersion(dateStr, windowDays = 7) {
+                if (!dateStr || chatVersions.length === 0) return null;
+                const ms = Date.parse(dateStr);
+                if (Number.isNaN(ms)) return null;
+                const window = windowDays * 24 * 60 * 60 * 1000;
+                const upper = ms + window;
+                const candidates = chatVersions.filter(v => v.ts <= upper);
+                if (candidates.length === 0) return null;
+                // pick the most recent candidate within the window (or before)
+                const best = candidates[candidates.length - 1];
+                return best.version || best.tag || null;
+            }
+
+            function rowMatchesFilters(feature, surfaceEntry) {
+                const sf = surfaceFilter.value;
+                const st = statusFilter.value;
+                const sku = skuFilter.value;
+
+                // Version Fit surface selection hides other surfaces
+                if (versionSurface.value && surfaceEntry.surface !== versionSurface.value) return false;
+
+                if (sf !== 'all' && surfaceEntry.surface !== sf) return false;
+
+                if (sku !== 'all') {
+                    const hasSku = feature.skus && feature.skus.some(s => s.name === sku && s.support !== 'not_included');
+                    if (!hasSku) return false;
+                }
+
+                const milestones = surfaceEntry.milestones || [];
+                const hasPreview = milestones.some(m => String(m.status).includes('preview'));
+                const hasGA = milestones.some(m => m.status === 'ga');
+
+                if (st === 'ga' && !hasGA) return false;
+                if (st === 'preview' && !hasPreview) return false;
+
+                // Version fit check: require min_ide_version <= userVersion when provided
+                const userSurface = versionSurface.value;
+                const userVersion = versionInput.value.trim();
+
+                if (userSurface && userVersion && userSurface === surfaceEntry.surface) {
+                    const relevant = milestones.filter(m => {
+                        if (st === 'ga') return m.status === 'ga';
+                        if (st === 'preview') return String(m.status).includes('preview');
+                        return true;
+                    });
+
+                    const anyOk = relevant.some(m => {
+                        if (m.min_ide_version) return cmpVersion(m.min_ide_version, userVersion) <= 0;
+                        // Unknown minimum IDE version -> do not exclude
+                        return true;
+                    });
+                    if (!anyOk) return false;
+                }
+                return true;
+            }
+
+            function formatDate(d) {
+                if (!d) return '—';
+                const dt = new Date(d);
+                if (Number.isNaN(dt.getTime())) return d;
+                return dt.toISOString().slice(0, 10);
+            }
+
+            function milestoneListHTML(milestones) {
+                if (!milestones || milestones.length === 0) {
+                    return '<div class="empty">No milestones recorded.</div>';
+                }
+                const order = { ga: 3, public_preview: 2, private_preview: 1, available: 2, planned: 0, deprecated: -1, withdrawn: -2 };
+                const sorted = [...milestones].sort((a, b) => {
+                    const da = a.start_date ? new Date(a.start_date).getTime() : 0;
+                    const db = b.start_date ? new Date(b.start_date).getTime() : 0;
+                    if (da !== db) return da - db;
+                    return (order[b.status] ?? 0) - (order[a.status] ?? 0);
+                });
+
+                const statusBadge = (s) => {
+                    const cls = s === 'ga' ? 'badge-ga'
+                        : String(s).includes('preview') ? 'badge-preview'
+                            : s === 'deprecated' ? 'badge-deprecated'
+                                : s === 'withdrawn' ? 'badge-withdrawn'
+                                    : 'badge-neutral';
+                    return `<span class="badge ${cls}">${s}</span>`;
+                };
+
+                return `
+      <ul class="milestone-list">
+        ${sorted.map(m => `
+          <li class="milestone-item">
+            <div class="milestone-head">
+              ${statusBadge(m.status)}
+              ${m.channel ? `<span class="chip micro">${m.channel}</span>` : ''}
+              <span class="muted">since</span> <strong>${formatDate(m.start_date)}</strong>
+            </div>
+            <div class="milestone-body">
+              <div class="kv"><span class="key">Min IDE</span><span class="val">${m.min_ide_version || '—'}</span></div>
+              <div class="kv"><span class="key">Min Plugin</span><span class="val">${m.min_plugin_version || '—'}</span></div>
+              ${m.evidence && m.evidence.length ? `
+                <div class="kv"><span class="key">Evidence</span>
+                  <span class="val evidence-links">
+                    ${m.evidence.slice(0, 5).map(ev => `<a href="${ev.url}" target="_blank" rel="noopener">source</a>`).join(' ')}
+                  </span>
+                </div>` : ''
+                    }
+            </div>
+          </li>
+        `).join('')}
+      </ul>
+    `;
+            }
+
+            function render() {
+                matrixBody.innerHTML = '';
+                let rows = 0;
+
+                for (const f of features) {
+                    for (const s of (f.surfaces || [])) {
+                        if (!rowMatchesFilters(f, s)) continue;
+
+                        const ms = s.milestones || [];
+
+                        const previewInfo = earliestVersion(ms, m => String(m.status).includes('preview'));
+                        const gaInfo = earliestVersion(ms, m => m.status === 'ga');
+
+                        if (statusFilter.value === 'ga' && !gaInfo.exists) continue;
+                        if (statusFilter.value === 'preview' && !previewInfo.exists) continue;
+
+                        // Determine display "Min Plugin" (GA preferred; else Preview). If missing and surface=VS Code, hydrate via lookup.
+                        let minPlugin = '—';
+                        const gaWithPlugin = ms.find(m => m.status === 'ga' && m.min_plugin_version);
+                        const previewWithPlugin = ms.find(m => String(m.status).includes('preview') && m.min_plugin_version);
+                        if (gaWithPlugin) {
+                            minPlugin = gaWithPlugin.min_plugin_version;
+                        } else if (previewWithPlugin) {
+                            minPlugin = previewWithPlugin.min_plugin_version;
+                        } else if (s.surface === 'VS Code') {
+                            // Try to infer via lockstep lookup using milestone date (prefer GA milestone date, else preview)
+                            const refDate = (gaInfo.exists && gaInfo.milestone && gaInfo.milestone.start_date)
+                                ? gaInfo.milestone.start_date
+                                : (previewInfo.exists && previewInfo.milestone && previewInfo.milestone.start_date)
+                                    ? previewInfo.milestone.start_date
+                                    : null;
+                            const inferred = pickChatPluginVersion(refDate);
+                            if (inferred) minPlugin = inferred;
+                        }
+
+                        const rowId = `${f.slug}__${(s.surface || '').replace(/\s+/g, '_')}`;
+
+                        // Build SKU chips for the drawer
+                        const skuChips = (f.skus && f.skus.length)
+                            ? f.skus.map(x => `<span class="chip micro">${x.name}: ${x.support}</span>`).join(' ')
+                            : '<span class="muted">No SKU data</span>';
+
+                        // Main data row
+                        const tr = document.createElement('tr');
+                        tr.className = 'data-row';
+                        tr.dataset.rowId = rowId;
+
+                        const tdFeature = document.createElement('td');
+                        tdFeature.innerHTML = `
+          <div class="feature-cell">
+            <button class="chevron" aria-expanded="false" aria-controls="drawer-${rowId}" title="Show all milestones"></button>
+            <strong>${f.feature}</strong>
+          </div>`;
+                        tr.appendChild(tdFeature);
+
+                        const tdCat = document.createElement('td');
+                        tdCat.textContent = f.category || '';
+                        tr.appendChild(tdCat);
+
+                        const tdSurface = document.createElement('td');
+                        tdSurface.textContent = s.surface;
+                        tr.appendChild(tdSurface);
+
+                        const tdPreview = document.createElement('td');
+                        if (previewInfo.exists) {
+                            const label = previewInfo.version ? previewInfo.version : 'True';
+                            const link = (previewInfo.evidence && previewInfo.evidence[0] && previewInfo.evidence[0].url) ? previewInfo.evidence[0].url : null;
+                            if (link) {
+                                tdPreview.innerHTML = `<a class="pill pill-preview pill-link" href="${link}" target="_blank" rel="noopener">${label}</a>`;
+                            } else {
+                                tdPreview.innerHTML = `<span class="pill pill-preview">${label}</span>`;
+                            }
+                        } else {
+                            tdPreview.textContent = '—';
+                        }
+                        tr.appendChild(tdPreview);
+
+                        const tdGA = document.createElement('td');
+                        if (gaInfo.exists) {
+                            const label = gaInfo.version ? gaInfo.version : 'True';
+                            const link = (gaInfo.evidence && gaInfo.evidence[0] && gaInfo.evidence[0].url) ? gaInfo.evidence[0].url : null;
+                            if (link) {
+                                tdGA.innerHTML = `<a class="pill pill-ga pill-link" href="${link}" target="_blank" rel="noopener">${label}</a>`;
+                            } else {
+                                tdGA.innerHTML = `<span class="pill pill-ga">${label}</span>`;
+                            }
+                        } else {
+                            tdGA.textContent = '—';
+                        }
+                        tr.appendChild(tdGA);
+
+                        const tdMinPlugin = document.createElement('td');
+                        tdMinPlugin.textContent = minPlugin || '—';
+                        tr.appendChild(tdMinPlugin);
+
+                        // Drawer row (milestones + SKUs)
+                        const trDrawer = document.createElement('tr');
+                        trDrawer.className = 'drawer-row';
+                        trDrawer.id = `drawer-${rowId}`;
+                        const tdDrawer = document.createElement('td');
+                        tdDrawer.colSpan = 6;
+                        tdDrawer.innerHTML = `
+          <div class="drawer">
+            <div class="drawer-title">
+              All milestones for <strong>${f.feature}</strong> on <strong>${s.surface}</strong>
+            </div>
+            <div class="drawer-skus">
+              <span class="key">Available SKUs</span>
+              <span class="val">${skuChips}</span>
+            </div>
+            ${milestoneListHTML(ms)}
+            <div class="muted" style="margin-top:8px;">
+              Copilot Chat versions release in lockstep with VS Code. Latest Chat requires latest VS Code; older VS Code cannot run newest Chat. (Sources: Marketplace notice; GitHub releases)
+            </div>
+          </div>`;
+                        trDrawer.appendChild(tdDrawer);
+
+                        matrixBody.appendChild(tr);
+                        matrixBody.appendChild(trDrawer);
+                        rows++;
+                    }
+                }
+
+                // Wire up row chevrons
+                matrixBody.querySelectorAll('.chevron').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const dataRow = btn.closest('tr.data-row');
+                        const rowId = dataRow?.dataset.rowId;
+                        if (!rowId) return;
+                        const drawer = document.getElementById(`drawer-${rowId}`);
+                        const isOpen = drawer?.classList.toggle('open');
+                        if (isOpen) btn.classList.add('open'); else btn.classList.remove('open');
+                        btn.setAttribute('aria-expanded', String(!!isOpen));
+                    });
+                });
+
+                // Summary chips
+                summary.innerHTML = [
+                    `<span class="chip">Features loaded: ${features.length}</span>`,
+                    `<span class="chip">Rows: ${rows}</span>`,
+                    `<span class="chip">Surface: ${surfaceFilter.value}</span>`,
+                    `<span class="chip">Status: ${statusFilter.value}</span>`,
+                    `<span class="chip">SKU: ${skuFilter.value}</span>`,
+                    versionSurface.value ? `<span class="chip">Version fit: ${versionSurface.value} ≤ ${versionInput.value || 'n/a'}</span>` : ''
+                ].filter(Boolean).join('');
+            }
+
+            [surfaceFilter, statusFilter, skuFilter, versionSurface, versionInput]
+                .forEach(el => el.addEventListener('input', render));
+
+            render();
+        })();
+    </script>
+</body>
+
+</html>
