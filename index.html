@@ -5,14 +5,6 @@
     <meta charset="utf-8" />
     <title>GitHub Copilot Feature Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--
-    Data sources referenced by the runtime:
-    - Copilot Chat marketplace page (lockstep with VS Code): https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat
-    - Copilot Chat open-source releases (version + published date): https://github.com/microsoft/vscode-copilot-chat/releases
-    - VS Code + Copilot Chat monthly changelogs (anchors for notable drops):
-      * v0.24 (Feb 6, 2025): https://github.blog/changelog/2025-02-06-next-edit-suggestions-agent-mode-and-prompts-files-for-github-copilot-in-vs-code-january-release-v0-24/
-      * v0.25 (Mar 6, 2025): https://github.blog/changelog/2025-03-06-github-copilot-updates-in-visual-studio-code-february-release-v0-25-including-improvements-to-agent-mode-and-next-exit-suggestions-ga-of-custom-instructions-and-more/
-  -->
     <link rel="stylesheet" href="assets/styles.css" />
 </head>
 
@@ -63,12 +55,14 @@
                         <option>Neovim</option>
                         <option>GitHub.com</option>
                         <option>CLI</option>
+                        <option>Eclipse</option>
+                        <option>Xcode</option>
                     </select>
                 </div>
 
                 <div>
-                    <label for="versionInput">Version (e.g., 17.10 for Visual Studio)</label>
-                    <input id="versionInput" placeholder="e.g., 17.10 or 1.0.0" />
+                    <label for="versionInput">Version (e.g., 17.14 for Visual Studio, 1.102 for VS Code)</label>
+                    <input id="versionInput" placeholder="e.g., 17.14 or 1.102" />
                 </div>
             </div>
         </div>
@@ -90,28 +84,27 @@
 
             <!-- Tiny inline legend -->
             <div class="legend">
-                <span class="legend-item"><span class="pill pill-preview">1.2.3</span> Preview version (yellow). If
-                    version unknown but confirmed available, shows <span class="pill pill-preview">True</span>. Click to
-                    open evidence.</span>
-                <span class="legend-item"><span class="pill pill-ga">1.2.3</span> GA version (green). If version unknown
-                    but confirmed available, shows <span class="pill pill-ga">True</span>. Click to open
-                    evidence.</span>
-                <span class="legend-item"><span class="chevron chevron-indicator" title="Milestones drawer"></span> Use
-                    chevron to view all milestones (status, channel, versions, dates, sources) and SKUs.</span>
+                <span class="legend-item"><span class="pill pill-preview">1.2.3</span> Preview version inferred from
+                    milestone date when missing. If still unknown but confirmed available, shows <span
+                        class="pill pill-preview">True</span>.</span>
+                <span class="legend-item"><span class="pill pill-ga">1.2.3</span> GA version inferred from milestone
+                    date when missing. If still unknown but confirmed available, shows <span
+                        class="pill pill-ga">True</span>.</span>
+                <span class="legend-item"><span class="chevron chevron-indicator" title="Milestones drawer"></span>
+                    Click the chevron to view all milestones (status, channel, versions, dates, sources) plus
+                    SKUs.</span>
             </div>
 
             <div class="footer">
                 Notes:
                 <ul>
-                    <li>Preview/GA columns show the minimum IDE version for that status. When the version is unknown but
-                        status is confirmed, a colored “True” is shown (yellow = preview, green = GA).</li>
-                    <li>SKU details appear inside the milestones drawer and remain searchable via the SKU filter.</li>
-                    <li>When “Version Fit” is set, results hide other surfaces and only show rows for the selected
-                        surface.</li>
-                    <li>Copilot Chat releases in lockstep with VS Code; newest Copilot Chat requires the latest VS Code.
-                        At runtime we estimate “Min Plugin” (GitHub.copilot-chat) by picking the Copilot Chat release
-                        nearest to each milestone date (within 7 days), using official releases and changelogs. See
-                        sources linked above.</li>
+                    <li>Preview/GA columns use min_ide_version when provided, otherwise they infer the IDE version from
+                        your lookup tables by milestone date (±7 days). If no version can be inferred, a colored “True”
+                        appears (yellow = preview, green = GA).</li>
+                    <li>“Min Plugin” (VS Code) is inferred from Copilot Chat releases near the milestone date when not
+                        specified.</li>
+                    <li>When “Version Fit” is set, results hide other surfaces and filter rows using the explicit or
+                        inferred IDE version.</li>
                 </ul>
             </div>
         </div>
@@ -119,27 +112,50 @@
 
     <script>
         (async function () {
-            // Load core data
+            // 1) Load core feature index and per-feature JSON
             const index = await (await fetch('data/index.json', { cache: 'no-store' })).json();
             const features = await Promise.all(index.features.map(async f => {
                 const data = await (await fetch('data/' + f.path, { cache: 'no-store' })).json();
                 return { slug: f.slug, path: f.path, ...data };
             }));
 
-            // Load Copilot Chat version lookup (version/date) for runtime hydration of "Min Plugin" (VS Code)
-            // Structure expected at: data/lookups/copilot-chat-versions.json
+            // 2) Load Copilot Chat version lookup (for Min Plugin inference on VS Code)
             let chatLookup = null;
             try {
                 chatLookup = await (await fetch('data/lookups/copilot-chat-versions.json', { cache: 'no-store' })).json();
             } catch (e) {
-                // If the lookup is missing, the UI will gracefully skip hydration.
                 console.warn('Copilot Chat lookup not found. Min Plugin hydration will be skipped.');
             }
-
             const chatVersions = (chatLookup && chatLookup.versions ? chatLookup.versions : [])
                 .map(v => ({ ...v, ts: v.released_at ? Date.parse(v.released_at) : NaN }))
                 .filter(v => !Number.isNaN(v.ts))
                 .sort((a, b) => a.ts - b.ts);
+
+            // 3) Load IDE version lookup tables (for IDE version inference from dates)
+            // Map surface -> lookup file path
+            const surfaceLookupMap = {
+                'VS Code': 'data/lookups/vscode-versions.json',
+                'Visual Studio 2022': 'data/lookups/visualstudio-versions.json',
+                'JetBrains IDEs': 'data/lookups/jetbrains-platform-versions.json',
+                'Eclipse': 'data/lookups/eclipse-versions.json',
+                'Xcode': 'data/lookups/xcode-versions.json'
+                // Neovim, GitHub.com, CLI typically not needed for IDE version mapping
+            };
+
+            const ideLookups = {};
+            await Promise.all(Object.entries(surfaceLookupMap).map(async ([surfaceName, path]) => {
+                try {
+                    const j = await (await fetch(path, { cache: 'no-store' })).json();
+                    const list = (j && j.versions) ? j.versions : [];
+                    ideLookups[surfaceName] = list
+                        .map(v => ({ ...v, ts: v.released_at ? Date.parse(v.released_at) : NaN }))
+                        .filter(v => !Number.isNaN(v.ts))
+                        .sort((a, b) => a.ts - b.ts);
+                } catch (e) {
+                    console.warn(`IDE lookup missing or invalid for ${surfaceName}: ${path}`);
+                    ideLookups[surfaceName] = [];
+                }
+            }));
 
             // DOM elements
             const surfaces = index.surfaces || [];
@@ -178,21 +194,7 @@
                 return ev;
             }
 
-            function earliestVersion(milestones, predicate) {
-                const filtered = (milestones || []).filter(predicate);
-                if (filtered.length === 0) return { exists: false, version: null, evidence: [] };
-                const withIde = filtered.filter(m => m.min_ide_version);
-                if (withIde.length > 0) {
-                    withIde.sort((a, b) => cmpVersion(a.min_ide_version, b.min_ide_version));
-                    const chosen = withIde[0];
-                    return { exists: true, version: chosen.min_ide_version, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
-                }
-                const chosen = filtered[0];
-                return { exists: true, version: null, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
-            }
-
-            // Lockstep-based plugin version picker:
-            // Choose the Copilot Chat version whose release date is on or before (milestone.start_date + 7 days).
+            // Lockstep-based plugin version picker for VS Code (Copilot Chat lookup)
             function pickChatPluginVersion(dateStr, windowDays = 7) {
                 if (!dateStr || chatVersions.length === 0) return null;
                 const ms = Date.parse(dateStr);
@@ -201,9 +203,54 @@
                 const upper = ms + window;
                 const candidates = chatVersions.filter(v => v.ts <= upper);
                 if (candidates.length === 0) return null;
-                // pick the most recent candidate within the window (or before)
                 const best = candidates[candidates.length - 1];
                 return best.version || best.tag || null;
+            }
+
+            // IDE version inference from date using lookup tables (per surface)
+            function pickIdeVersionByDate(surfaceName, dateStr, toleranceDays = 7) {
+                if (!surfaceName || !dateStr) return null;
+                const lookup = ideLookups[surfaceName] || [];
+                if (lookup.length === 0) return null;
+                const ms = Date.parse(dateStr);
+                if (Number.isNaN(ms)) return null;
+                const tolms = toleranceDays * 24 * 60 * 60 * 1000;
+                const upper = ms + tolms;
+
+                // Choose the latest version with release date <= (milestone date + tolerance)
+                const candidates = lookup.filter(v => typeof v.ts === 'number' && v.ts <= upper);
+                if (candidates.length === 0) return null;
+                const best = candidates[candidates.length - 1];
+                return best.version || null;
+            }
+
+            // Find earliest version (Preview or GA) for a surface, preferring explicit min_ide_version
+            function earliestVersion(milestones, predicate, surfaceName) {
+                const filtered = (milestones || []).filter(predicate);
+                if (filtered.length === 0) return { exists: false, version: null, evidence: [], milestone: null };
+
+                // Prefer explicit min_ide_version if present
+                const withIde = filtered.filter(m => m.min_ide_version);
+                if (withIde.length > 0) {
+                    withIde.sort((a, b) => cmpVersion(a.min_ide_version, b.min_ide_version));
+                    const chosen = withIde[0];
+                    return { exists: true, version: chosen.min_ide_version, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
+                }
+
+                // Otherwise infer from lookup tables by milestone date
+                const inferred = filtered
+                    .map(m => ({ v: pickIdeVersionByDate(surfaceName, m.start_date), m }))
+                    .filter(x => !!x.v);
+
+                if (inferred.length > 0) {
+                    inferred.sort((a, b) => cmpVersion(a.v, b.v));
+                    const chosen = inferred[0];
+                    return { exists: true, version: chosen.v, evidence: pickEvidence(chosen.m.evidence || []), milestone: chosen.m };
+                }
+
+                // Status exists but version cannot be determined -> True
+                const chosen = filtered[0];
+                return { exists: true, version: null, evidence: pickEvidence(chosen.evidence || []), milestone: chosen };
             }
 
             function rowMatchesFilters(feature, surfaceEntry) {
@@ -211,7 +258,7 @@
                 const st = statusFilter.value;
                 const sku = skuFilter.value;
 
-                // Version Fit surface selection hides other surfaces
+                // If Version Fit surface selected, restrict to that surface
                 if (versionSurface.value && surfaceEntry.surface !== versionSurface.value) return false;
 
                 if (sf !== 'all' && surfaceEntry.surface !== sf) return false;
@@ -228,7 +275,7 @@
                 if (st === 'ga' && !hasGA) return false;
                 if (st === 'preview' && !hasPreview) return false;
 
-                // Version fit check: require min_ide_version <= userVersion when provided
+                // Version fit check: use explicit or inferred IDE version
                 const userSurface = versionSurface.value;
                 const userVersion = versionInput.value.trim();
 
@@ -240,10 +287,12 @@
                     });
 
                     const anyOk = relevant.some(m => {
-                        if (m.min_ide_version) return cmpVersion(m.min_ide_version, userVersion) <= 0;
-                        // Unknown minimum IDE version -> do not exclude
+                        const inferred = m.min_ide_version || pickIdeVersionByDate(surfaceEntry.surface, m.start_date);
+                        if (inferred) return cmpVersion(inferred, userVersion) <= 0;
+                        // Unknown IDE min → do not exclude
                         return true;
                     });
+
                     if (!anyOk) return false;
                 }
                 return true;
@@ -308,18 +357,24 @@
                 let rows = 0;
 
                 for (const f of features) {
+                    // SKU chips (in drawer)
+                    const skuChips = (f.skus && f.skus.length)
+                        ? f.skus.map(x => `<span class="chip micro">${x.name}: ${x.support}</span>`).join(' ')
+                        : '<span class="muted">No SKU data</span>';
+
                     for (const s of (f.surfaces || [])) {
                         if (!rowMatchesFilters(f, s)) continue;
 
                         const ms = s.milestones || [];
 
-                        const previewInfo = earliestVersion(ms, m => String(m.status).includes('preview'));
-                        const gaInfo = earliestVersion(ms, m => m.status === 'ga');
+                        // Compute earliest preview and GA IDE versions with inference
+                        const previewInfo = earliestVersion(ms, m => String(m.status).includes('preview'), s.surface);
+                        const gaInfo = earliestVersion(ms, m => m.status === 'ga', s.surface);
 
                         if (statusFilter.value === 'ga' && !gaInfo.exists) continue;
                         if (statusFilter.value === 'preview' && !previewInfo.exists) continue;
 
-                        // Determine display "Min Plugin" (GA preferred; else Preview). If missing and surface=VS Code, hydrate via lookup.
+                        // Determine "Min Plugin" (VS Code only), preferring explicit, else inference by date via Copilot Chat lookup
                         let minPlugin = '—';
                         const gaWithPlugin = ms.find(m => m.status === 'ga' && m.min_plugin_version);
                         const previewWithPlugin = ms.find(m => String(m.status).includes('preview') && m.min_plugin_version);
@@ -328,7 +383,6 @@
                         } else if (previewWithPlugin) {
                             minPlugin = previewWithPlugin.min_plugin_version;
                         } else if (s.surface === 'VS Code') {
-                            // Try to infer via lockstep lookup using milestone date (prefer GA milestone date, else preview)
                             const refDate = (gaInfo.exists && gaInfo.milestone && gaInfo.milestone.start_date)
                                 ? gaInfo.milestone.start_date
                                 : (previewInfo.exists && previewInfo.milestone && previewInfo.milestone.start_date)
@@ -339,11 +393,6 @@
                         }
 
                         const rowId = `${f.slug}__${(s.surface || '').replace(/\s+/g, '_')}`;
-
-                        // Build SKU chips for the drawer
-                        const skuChips = (f.skus && f.skus.length)
-                            ? f.skus.map(x => `<span class="chip micro">${x.name}: ${x.support}</span>`).join(' ')
-                            : '<span class="muted">No SKU data</span>';
 
                         // Main data row
                         const tr = document.createElement('tr');
@@ -415,7 +464,7 @@
             </div>
             ${milestoneListHTML(ms)}
             <div class="muted" style="margin-top:8px;">
-              Copilot Chat versions release in lockstep with VS Code. Latest Chat requires latest VS Code; older VS Code cannot run newest Chat. (Sources: Marketplace notice; GitHub releases)
+              Tip: IDE versions shown above use explicit minimums when present, otherwise they’re inferred from date lookups (±7 days).
             </div>
           </div>`;
                         trDrawer.appendChild(tdDrawer);

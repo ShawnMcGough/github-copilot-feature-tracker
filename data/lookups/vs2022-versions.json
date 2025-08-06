@@ -1,0 +1,129 @@
+{
+    "schema_version": "0.1",
+    "ide": "Visual Studio 2022",
+    "channel": "Current",
+    "source": "https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history#fixed-version-bootstrappers",
+    "last_updated_utc": "2025-08-06T17:10:00Z",
+    "versions": [
+        {
+            "version": "17.14.9",
+            "released_at": "2025-07-15",
+            "build": "17.14.36310.24"
+        },
+        {
+            "version": "17.14.8",
+            "released_at": "2025-07-08",
+            "build": "17.14.36301.6"
+        },
+        {
+            "version": "17.14.7",
+            "released_at": "2025-06-23",
+            "build": "17.14.36221.1"
+        },
+        {
+            "version": "17.14.6",
+            "released_at": "2025-06-17",
+            "build": "17.14.36212.18"
+        },
+        {
+            "version": "17.14.5",
+            "released_at": "2025-06-10",
+            "build": "17.14.36203.30"
+        },
+        {
+            "version": "17.14.4",
+            "released_at": "2025-06-03",
+            "build": "17.14.36202.13"
+        },
+        {
+            "version": "17.14.3",
+            "released_at": "2025-05-28",
+            "build": "17.14.36127.28"
+        },
+        {
+            "version": "17.14.2",
+            "released_at": "2025-05-22",
+            "build": "17.14.36121.58"
+        },
+        {
+            "version": "17.14.1",
+            "released_at": "2025-05-21",
+            "build": "17.14.36119.2"
+        },
+        {
+            "version": "17.14.0",
+            "released_at": "2025-05-13",
+            "build": "17.14.36109.1"
+        },
+        {
+            "version": "17.13.7",
+            "released_at": "2025-05-13",
+            "build": "17.13.36105.23"
+        },
+        {
+            "version": "17.13.6",
+            "released_at": "2025-04-08",
+            "build": "17.13.35931.197"
+        },
+        {
+            "version": "17.13.5",
+            "released_at": "2025-03-25",
+            "build": "17.13.35919.96"
+        },
+        {
+            "version": "17.13.4",
+            "released_at": "2025-03-18",
+            "build": "17.13.35913.81"
+        },
+        {
+            "version": "17.13.3",
+            "released_at": "2025-03-11",
+            "build": "17.13.35828.75"
+        },
+        {
+            "version": "17.13.2",
+            "released_at": "2025-02-26",
+            "build": "17.13.35825.156"
+        },
+        {
+            "version": "17.13.1",
+            "released_at": "2025-02-19",
+            "build": "17.13.35818.85"
+        },
+        {
+            "version": "17.13.0",
+            "released_at": "2025-02-11",
+            "build": "17.13.35806.99"
+        },
+        {
+            "version": "17.12.5",
+            "released_at": "2025-02-11",
+            "build": "17.12.35728.132"
+        },
+        {
+            "version": "17.12.4",
+            "released_at": "2025-01-14",
+            "build": "17.12.35707.178"
+        },
+        {
+            "version": "17.12.3",
+            "released_at": "2024-12-03",
+            "build": "17.12.35527.113"
+        },
+        {
+            "version": "17.12.2",
+            "released_at": "2024-11-26",
+            "build": "17.12.35521.163"
+        },
+        {
+            "version": "17.12.1",
+            "released_at": "2024-11-19",
+            "build": "17.12.35514.174"
+        },
+        {
+            "version": "17.12.0",
+            "released_at": "2024-11-12",
+            "build": "17.12.35506.116"
+        }
+    ]
+}

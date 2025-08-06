@@ -1,0 +1,395 @@
+{
+    "schema_version": "0.1",
+    "ide": "VS Code",
+    "source": "https://github.com/microsoft/vscode/releases",
+    "last_scraped_utc": "2025-08-06T17:05:00Z",
+    "releases": [
+        {
+            "version": "1.102.1",
+            "label": "June 2025 Recovery 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Recovery update for June 2025."
+        },
+        {
+            "version": "1.102.0",
+            "label": "June 2025",
+            "type": "monthly",
+            "released_at": "2025-07-09",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly June 2025 release."
+        },
+        {
+            "version": "1.101.2",
+            "label": "May 2025 Recovery 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second recovery for May 2025."
+        },
+        {
+            "version": "1.101.1",
+            "label": "May 2025 Recovery 1",
+            "type": "recovery",
+            "released_at": "2025-06-19",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First recovery for May 2025."
+        },
+        {
+            "version": "1.101.0",
+            "label": "May 2025",
+            "type": "monthly",
+            "released_at": "2025-06-12",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly May 2025 release."
+        },
+        {
+            "version": "1.100.3",
+            "label": "April 2025 Recovery 3",
+            "type": "recovery",
+            "released_at": "2025-06-03",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Third recovery for April 2025."
+        },
+        {
+            "version": "1.100.2",
+            "label": "April 2025 Recovery 2",
+            "type": "recovery",
+            "released_at": "2025-05-15",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second recovery for April 2025."
+        },
+        {
+            "version": "1.100.1",
+            "label": "April 2025 Recovery 1",
+            "type": "recovery",
+            "released_at": "2025-05-13",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First recovery for April 2025."
+        },
+        {
+            "version": "1.100.0",
+            "label": "April 2025",
+            "type": "monthly",
+            "released_at": "2025-05-08",
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly April 2025 release."
+        },
+        {
+            "version": "1.99.3",
+            "label": "March 2025 Recovery 3",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Third recovery for March 2025."
+        },
+        {
+            "version": "1.99.2",
+            "label": "March 2025 Recovery 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second recovery for March 2025."
+        },
+        {
+            "version": "1.99.1",
+            "label": "March 2025 Recovery 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First recovery for March 2025."
+        },
+        {
+            "version": "1.99.0",
+            "label": "March 2025",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly March 2025 release."
+        },
+        {
+            "version": "1.98.2",
+            "label": "February 2025 Recovery 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second recovery for February 2025."
+        },
+        {
+            "version": "1.98.1",
+            "label": "February 2025 Recovery 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First recovery for February 2025."
+        },
+        {
+            "version": "1.98.0",
+            "label": "February 2025",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly February 2025 release."
+        },
+        {
+            "version": "1.97.0",
+            "label": "January 2025",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly January 2025 release."
+        },
+        {
+            "version": "1.96.4",
+            "label": "November 2024 Update 4",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Fourth update for November 2024."
+        },
+        {
+            "version": "1.96.3",
+            "label": "November 2024 Update 3",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Third update for November 2024."
+        },
+        {
+            "version": "1.96.2",
+            "label": "November 2024 Update 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second update for November 2024."
+        },
+        {
+            "version": "1.96.1",
+            "label": "November 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for November 2024."
+        },
+        {
+            "version": "1.96.0",
+            "label": "November 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly November 2024 release."
+        },
+        {
+            "version": "1.95.3",
+            "label": "October 2024 Update 3",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Third update for October 2024."
+        },
+        {
+            "version": "1.95.2",
+            "label": "October 2024 Update 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second update for October 2024."
+        },
+        {
+            "version": "1.95.1",
+            "label": "October 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for October 2024."
+        },
+        {
+            "version": "1.95.0",
+            "label": "October 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly October 2024 release."
+        },
+        {
+            "version": "1.94.2",
+            "label": "September 2024 Update 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second update for September 2024."
+        },
+        {
+            "version": "1.94.1",
+            "label": "September 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for September 2024."
+        },
+        {
+            "version": "1.94.0",
+            "label": "September 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly September 2024 release."
+        },
+        {
+            "version": "1.93.1",
+            "label": "August 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for August 2024."
+        },
+        {
+            "version": "1.93.0",
+            "label": "August 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly August 2024 release."
+        },
+        {
+            "version": "1.92.2",
+            "label": "July 2024 Update 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second update for July 2024."
+        },
+        {
+            "version": "1.92.1",
+            "label": "July 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for July 2024."
+        },
+        {
+            "version": "1.92.0",
+            "label": "July 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly July 2024 release."
+        },
+        {
+            "version": "1.91.1",
+            "label": "June 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for June 2024."
+        },
+        {
+            "version": "1.91.0",
+            "label": "June 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly June 2024 release."
+        },
+        {
+            "version": "1.90.2",
+            "label": "May 2024 Update 2",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Second update for May 2024."
+        },
+        {
+            "version": "1.90.1",
+            "label": "May 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for May 2024."
+        },
+        {
+            "version": "1.90.0",
+            "label": "May 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly May 2024 release."
+        },
+        {
+            "version": "1.89.1",
+            "label": "April 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for April 2024."
+        },
+        {
+            "version": "1.89.0",
+            "label": "April 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly April 2024 release."
+        },
+        {
+            "version": "1.88.1",
+            "label": "March 2024 Update 1",
+            "type": "recovery",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "First update for March 2024."
+        },
+        {
+            "version": "1.88.0",
+            "label": "March 2024",
+            "type": "monthly",
+            "released_at": null,
+            "relative_time": null,
+            "tag_url": "https://github.com/microsoft/vscode/releases",
+            "notes": "Monthly March 2024 release."
+        }
+    ]
+}

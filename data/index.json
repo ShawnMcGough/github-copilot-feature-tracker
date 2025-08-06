@@ -1,7 +1,7 @@
 {
   "schema_version": "0.2",
   "generated_at": "2025-08-05",
-  "surfaces": ["VS Code", "Visual Studio 2022", "JetBrains IDEs", "Neovim", "GitHub.com", "CLI"],
+  "surfaces": ["VS Code", "Visual Studio 2022", "JetBrains IDEs", "Neovim", "Eclipse", "GitHub.com", "CLI", "Xcode"],
   "features": [
     {"slug": "inline-completions", "feature": "Inline Completions", "category": "Inline", "path": "features/inline-completions.json"},
     {"slug": "copilot-chat-ide", "feature": "Copilot Chat (in IDE)", "category": "Chat", "path": "features/copilot-chat-ide.json"},
