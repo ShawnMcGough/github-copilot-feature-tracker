@@ -1,6 +1,8 @@
 // scripts/build-copilot-chat-lookup.js
 // Node 20+; uses node-fetch@3 installed by the workflow.
-// Purpose: Produce data/lookups/copilot-chat-versions.json from GitHub Releases.
+// Purpose: Produce data/lookups/copilot-chat-versions.json from GitHub Releases,
+//          keeping ONLY stable (non-draft, non-prerelease) releases, going back
+//          at least two years (configurable via env).
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,10 +12,15 @@ const OWNER = 'microsoft';
 const REPO = 'vscode-copilot-chat';
 const OUT = path.join('data', 'lookups', 'copilot-chat-versions.json');
 
-// IMPORTANT: Use the API base, not the website base.
-// In GitHub Actions, GITHUB_API_URL typically resolves to https://api.github.com
+// Use the REST API base (not the website host).
+// In GitHub Actions, GITHUB_API_URL is usually https://api.github.com
 const API_BASE = process.env.GITHUB_API_URL || 'https://api.github.com';
 const TOKEN = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+
+// How far back to collect releases. Default: 2 years (≈730 days).
+const YEARS_BACK = Number(process.env.YEARS_BACK || 2);
+const DAYS_BACK = Math.max(1, Math.floor(YEARS_BACK * 365));
+const FROM_TS = Date.now() - DAYS_BACK * 24 * 60 * 60 * 1000;
 
 const HEADERS = {
     'Accept': 'application/vnd.github+json',
@@ -37,44 +44,60 @@ async function gh(pathname, page = 1, perPage = 100) {
     return { data, link };
 }
 
+// Parse RFC 5988 Link header to detect rel="next"
+function hasNext(linkHeader) {
+    return /<[^>]+>; rel="next"/i.test(linkHeader);
+}
+
 function normalize(release) {
     const tag = release.tag_name || release.name || '';
-    const isPrerelease = !!release.prerelease;
-    // Prefer published_at; fallback to created_at
     const released_at = release.published_at || release.created_at || null;
     return {
         version: String(tag).replace(/^v/, ''),
         tag: tag,
         released_at,
-        channel: isPrerelease ? 'pre-release' : 'stable',
+        channel: 'stable',
         anchors: [
             `https://github.com/${OWNER}/${REPO}/releases/tag/${encodeURIComponent(tag)}`
         ]
     };
 }
 
-function hasNext(linkHeader) {
-    // Parse RFC5988 Link header for rel="next"
-    // Example: <https://api.github.com/...&page=2>; rel="next", <...page=5>; rel="last"
-    return /<[^>]+>; rel="next"/i.test(linkHeader);
-}
-
-async function getAllReleases() {
-    const all = [];
+async function getStableReleasesSince(fromTs) {
+    const out = [];
     let page = 1;
+
     while (true) {
         const { data, link } = await gh('/releases', page, 100);
         if (!Array.isArray(data) || data.length === 0) break;
-        all.push(...data);
-        if (!hasNext(link)) break;
+
+        // Releases are returned newest-first. Keep only stable (non-draft, non-prerelease).
+        for (const rel of data) {
+            if (rel.draft || rel.prerelease) continue; // stable only
+            const ts = Date.parse(rel.published_at || rel.created_at || '');
+            if (!Number.isNaN(ts)) {
+                // Collect as long as release is on/after fromTs.
+                if (ts >= fromTs) out.push(rel);
+            }
+        }
+
+        // If the oldest release on this page is already older than fromTs,
+        // we can stop paging (since subsequent pages are even older).
+        const oldest = data[data.length - 1];
+        const oldestTs = Date.parse(oldest?.published_at || oldest?.created_at || '');
+        const reachedThreshold = !Number.isNaN(oldestTs) && oldestTs < fromTs;
+
+        if (reachedThreshold || !hasNext(link)) break;
         page += 1;
     }
-    return all;
+
+    return out;
 }
 
 async function main() {
-    const releases = await getAllReleases(); // authenticated if GH_TOKEN set
-    const entries = releases
+    const stable = await getStableReleasesSince(FROM_TS);
+
+    const entries = stable
         .filter(r => !!(r.tag_name || r.name))
         .map(normalize)
         .filter(r => !!r.released_at)
@@ -84,13 +107,13 @@ async function main() {
         schema_version: '0.1',
         source: `https://github.com/${OWNER}/${REPO}/releases`,
         last_updated_utc: new Date().toISOString(),
-        notes: 'Generated from GitHub Releases. Timestamps reflect GitHub release publish time.',
+        notes: `Generated from GitHub Releases. Stable-only (draft=false, prerelease=false). Window: last ${DAYS_BACK} days.`,
         versions: entries
     };
 
     fs.mkdirSync(path.dirname(OUT), { recursive: true });
     fs.writeFileSync(OUT, JSON.stringify(out, null, 2), 'utf8');
-    console.log(`Wrote ${OUT} with ${entries.length} versions`);
+    console.log(`Wrote ${OUT} with ${entries.length} stable versions (last ${DAYS_BACK} days).`);
 }
 
 main().catch(err => {
