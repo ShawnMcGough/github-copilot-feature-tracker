@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "source": "https://github.com/microsoft/vscode-copilot-chat/releases",
-  "last_updated_utc": "2025-08-18T04:08:07.800Z",
+  "last_updated_utc": "2025-08-25T03:54:37.752Z",
   "notes": "Generated from GitHub Releases. Stable-only (draft=false, prerelease=false). Window: last 730 days.",
   "versions": [
     {
@@ -38,6 +38,24 @@
       "channel": "stable",
       "anchors": [
         "https://github.com/microsoft/vscode-copilot-chat/releases/tag/v0.30.1"
+      ]
+    },
+    {
+      "version": "0.30.2",
+      "tag": "v0.30.2",
+      "released_at": "2025-08-21T17:12:50Z",
+      "channel": "stable",
+      "anchors": [
+        "https://github.com/microsoft/vscode-copilot-chat/releases/tag/v0.30.2"
+      ]
+    },
+    {
+      "version": "0.30.3",
+      "tag": "v0.30.3",
+      "released_at": "2025-08-22T16:35:22Z",
+      "channel": "stable",
+      "anchors": [
+        "https://github.com/microsoft/vscode-copilot-chat/releases/tag/v0.30.3"
       ]
     }
   ]
