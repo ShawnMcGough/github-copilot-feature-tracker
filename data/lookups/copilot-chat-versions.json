@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
   "source": "https://github.com/microsoft/vscode-copilot-chat/releases",
-  "last_updated_utc": "2026-09-14T08:54:23.212Z",
+  "last_updated_utc": "2026-09-21T08:56:12.371Z",
   "notes": "Generated from GitHub Releases. Stable-only (draft=false, prerelease=false). Window: last 730 days.",
   "versions": [
     {
